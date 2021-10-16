@@ -1,189 +1,388 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <style>
-        body {
-            margin: auto;
-            background-color: rgb(46, 66, 42);
-            color: white;
-            font-size: 30px;
-        }
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Gemunu+Libre:wght@200;300;400;500;600;700;800&display=swap"
+    rel="stylesheet">
+  <title>Matching Game</title>
+  <style>
+    * {
+      font-family: 'Gemunu Libre', sans-serif;
+      font-weight: 700;
+      font-size: 20px;
+    }
 
-        #sz {
-            margin: auto;
-            width: 780px;
-            height: 840px;
-            background: rgba(132, 187, 224, 0.35);
-            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
-            backdrop-filter: blur(3.5px);
-            -webkit-backdrop-filter: blur(3.5px);
-            border-radius: 5px;
-            border: 1px solid rgba(255, 255, 255, 0.18);
+    html,
+    body {
+      background:linear-gradient(
+        to bottom,
+        rgba(135, 206, 235, 0.5) 30%,
+        rgba(135, 206, 235, 1) 80%,
+        white 80%,
+        white 95%,
+        SeaGreen 95%
+        ) ;
+      width: 100vw;
+      height: 100vh;
+      padding: 0%;
+      position: relative;
+    }
 
-        }
+    #all {
+      width: 1000px;
+      height: 500px;
+      background: #A0522D;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
 
-        .card {
-            width: 250px;
-            height: 200px;
-            position: relative;
-            transform-style: preserve-3d;
-            transition: transform .5s;
-            float: left;
-            margin: 2px;
-        }
+    #game,
+    #block,
+    #over {
+      width: 1000px;
+      height: 400px;
+      /* background: maroon; */
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+    }
 
-        .card-back {
-            width: 100%;
-            height: 100%;
-            background-image: url(./flower/background.jpg);
-            background-repeat: no-repeat;
-            background-position: center;
-            background-size: contain;
-            position: absolute;
-            backface-visibility: hidden;
-            -web-backface-visibility: hidden;
-        }
+    #game{
+      margin-left: 2%;
+    }
 
-        .card-front {
-            width: 100%;
-            height: 100%;
-            background-image: url(./flower/korea-text-1.jpg);
-            background-repeat: no-repeat;
-            background-position: center;
-            background-size: contain;
-            position: absolute;
-            transform: rotateY(180deg);
-        }
+    #top {
+      position: relative;
+      left: 50%;
+      transform: translateX(-50%);
+      display: inline-block;
+      text-align: center;
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      background: #DB7093;
+      color: white;
+      line-height: 50px;
+    }
 
-        .card-open {
-            transform: rotateY(180deg);
-        }
 
-        #btn-start {
-            font-size: 25px;
-            color: white;
-            background-color: rgb(46, 66, 42);
-            border: 2px solid lightgoldenrodyellow;
-            border-radius: 15px;
-            width: 120px;
-            position: relative;
-            top: 3px;
-            left: 5%;
-        }
+    #start,
+    #over-text {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 200px;
+      height: 100px;
+      border-radius: 50%;
+      line-height: 100px;
+      font-size: 30px;
+      text-align: center;
+    }
+    #start {
+      background: #a9c5b5;
+    }
 
-        #btn-start:hover {
-            color: black;
-            background-color: lightgoldenrodyellow;
-        }
+    #start:hover {
+      background: #21663f;
+      color: whitesmoke;
+      cursor: pointer;
+    }
 
-        #time {
-            position: relative;
-            left: 5%;
-            display: inline;
-        }
-    </style>
+    #over-text {
+      background: #A9A9A9;
+      color: white;
+      transition: .5s;
+      cursor: pointer;
+    }
+
+    .card {
+      width: 150px;
+      height: 200px;
+      position: relative;
+      /* 設定子元素在 3D 空間內 */
+      transform-style: preserve-3d;
+      transition: transform .5s;
+      float: left;
+      margin: 5px;
+    }
+
+    .card-back {
+      width: 150px;
+      height: 200px;
+      background-image: url(./img/back.png);
+      background-repeat: no-repeat;
+      background-position: center;
+      background-size: contain;
+      position: absolute;
+      transform: rotateY(0deg);
+      transition: transform .5s;
+      /* 翻過來後隱藏背面 */
+      backface-visibility: hidden;
+      -web-backface-visibility: hidden;
+    }
+
+    .card-front {
+      width: 100%;
+      height: 100%;
+      background-repeat: no-repeat;
+      background-position: center;
+      background-size: contain;
+      position: absolute;
+      transform: rotateY(180deg);
+    }
+
+    .card-open,
+    .card-clear {
+      transform: rotateY(180deg);
+    }
+
+    #plant {
+      width: 100vw;
+      height: 20%;
+      position: absolute;
+      bottom: 18%;
+    }
+    #tree-1 {
+      width: 0;
+      height: 0;
+      border-style: solid;
+      border-width: 0 50px 150px 50px;
+      border-color: transparent transparent #096609 transparent;
+      position: absolute;
+      bottom: 20%;
+      left: 0;
+    }
+    #trunk-1 {
+      width: 20px;
+      height: 40px;
+      background: SaddleBrown;
+      position: absolute;
+      top: 150px;
+      left: 0;
+      transform: translateX(-50%);
+    }
+    #tree-2 {
+      width: 0;
+      height: 0;
+      border-style: solid;
+      border-width: 0 50px 150px 50px;
+      border-color: transparent transparent DarkOliveGreen transparent;
+      position: absolute;
+      bottom: 15%;
+      left: 5%;
+    }
+    #trunk-2 {
+      width: 20px;
+      height: 35px;
+      background: SaddleBrown;
+      position: absolute;
+      top: 150px;
+      left: 0;
+      transform: translateX(-50%);
+    }
+    #tree-3 {
+      width: 0;
+      height: 0;
+      border-style: solid;
+      border-width: 0 50px 150px 50px;
+      border-color: transparent transparent DarkGreen transparent;
+      position: absolute;
+      bottom: 20%;
+      right: 5%;
+    }
+    #trunk-3 {
+      width: 20px;
+      height: 40px;
+      background: SaddleBrown;
+      position: absolute;
+      top: 150px;
+      left: 0;
+      transform: translateX(-50%);
+    }
+    #tree-4 {
+      width: 0;
+      height: 0;
+      border-style: solid;
+      border-width: 0 50px 150px 50px;
+      border-color: transparent transparent OliveDrab transparent;
+      position: absolute;
+      bottom: 15%;
+      right: 0;
+    }
+    #trunk-4 {
+      width: 20px;
+      height: 35px;
+      background: SaddleBrown;
+      position: absolute;
+      top: 150px;
+      left: 0;
+      transform: translateX(-50%);
+    }
+  </style>
 </head>
-
 <body>
-    <input type="button" value="Start" id="btn-start">
-    <div id="game">
-        <p id="time">Time: <span id="text-countdown">0</span></p>
-        <div id="sz"></div>
+  <div id="plant">
+    <div id="tree-1"><div id="trunk-1"></div></div>
+    <div id="tree-2"><div id="trunk-2"></div></div>
+    <div id="tree-3"><div id="trunk-3"></div></div>
+    <div id="tree-4"><div id="trunk-4"></div></div>
+  </div>
+  <div id="all">
+    <div id="top">0</div>
+    <div id="game"></div>
+    <div id="block">
+        <div id="start">Start</div>
     </div>
-    <!-- -------------------------------------------------------------------- -->
-    <script src="./jquery-3.6.0.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
-    <script>
-        const btnStart = document.getElementById('btn-start')
-        const textCountdown = document.getElementById('text-countdown')
+    <div id="over">
+      <div id="over-text">Game Over</div>
+    </div>
+  </div>
 
+  <!-- --------------------------------------------------- -->
+  <script src="./jquery-3.6.0.min.js"></script>
+  <script>
+    let countdown = 45
+    let remember = 5
+    $('#over').css('display', 'none')
+    $('#start').click(function () {
+      $('#block').css('display', 'none')
+      $('.card-back').css('transform', 'rotateY(180deg)')
+      $('.card-front').css('transform', 'rotateY(0deg)')
+      $('#top').css('background', '#FFA500')
+      $('#top').text(remember)
+      remembertime = setInterval(() => {
+        remember--
+        $('#top').text(remember)
+      }, 1000)
+      setTimeout(() => {
+        clearInterval(remembertime)
+        $('#top').css('background', '#DB7093')
+        $('.card-back').css('transform', 'rotateY(0deg)')
+        $('.card-front').css('transform', 'rotateY(180deg)')
+        $('#top').text(countdown)
+        gametime = setInterval(() => { 
+          countdown--
+          $('#top').text(countdown)
 
-        let count = 0
-        btnStart.onclick = () => {
-            btnStart.disabled = true
-            if (btnStart.disabled) {
-                $('#btn-start').css({ color: 'white', backgroundColor: 'lightgrey' })
-            }
-            count = 1
-            textCountdown.innerText = count
-            timer = setInterval(() => {
-                count++
-                textCountdown.innerText = count
-            }, 1000)
-        }
+          // 遊戲時間結束
+          if (countdown <= 0) {
+            clearInterval(gametime)
+            $('#over').css('display', 'block')
+            $('#over-text').css('background', '#FFB6C1')
+            $('#over-text').text('Finish')
 
+          // 滑鼠移出
+            setTimeout(() => {
+              $('#over-text').mouseout(() => {
+                $('#over-text').css('background', '#FFB6C1')
+                $('#over-text').text('Finish')
+              })
 
-        for (let i = 0; i < 12; i++) {
-            $('#sz').append(`<div class="card">
-            <div class="card-front"></div>
-            <div class="card-back"></div>
-        </div>`)
-        }
+              // 滑鼠移入
+              $('#over-text').mouseover(() => {
+                $('#over-text').css('background', '#F08080')
+                $('#over-text').text('Again')
+              })
+            }, 800)
+            $('#over-text').click(() => {
+              $('#over').css('display', 'none')
+              $('#block').css('display', 'block')
+              countdown = 45
+              remember = 5
+              $('.card-clear').find('.card-front').css('backgroundColor', 'pink')
+              $('.card').attr('class', 'card')
+              gamesetting()
+            })
+          }
+          // 過關結束
+          if ($('.card-clear').length === 12) {
+            clearInterval(gametime)
+            setTimeout(() => {
+              $('#over').css('display', 'block')
+              $('#over-text').css('background', '#FFB6C1')
+              $('#over-text').text('Congratulations')
 
-        // 韓文
-        for (let i = 0; i < 6; i++) {
-            let number = i % 6 + 1
-
-            $('.card').eq(i).find('.card-front').css('background-image', `url(./flower/korea-text-${number}.jpg)`)
-            $('.card').eq(i).attr('data-card', number)
-
-
-            let target = Math.floor(Math.random() * 12)
-            $('.card').eq(target).insertAfter($('.card').eq(i))
-        }
-        // 中文
-        for (let i = 6; i < 12; i++) {
-            let number = i % 6 + 1
-
-            $('.card').eq(i).find('.card-front').css('background-image', `url(./flower/ch-text-${number}.jpg)`)
-            $('.card').eq(i).attr('data-card', number)
-
-
-            let target = Math.floor(Math.random() * 12)
-            $('.card').eq(target).insertAfter($('.card').eq(i))
-        }
-
-        $('#game').on('click', '.card', function () {
-
-            if ($('.card-open').length < 2 && !$(this).hasClass('card-open')) {
-                $(this).addClass('card-open')
-            }
-
-            if ($('.card-open').length === 2) {
-
-                if ($('.card-open').eq(0).attr('data-card') === $('.card-open').eq(1).attr('data-card')) {
-
-                    $('.card-open').fadeTo(1000, 0).addClass('card-clear')
-                }
-
-                setTimeout(() => {
-                    $('.card-open').removeClass('card-open')
-                }, 1000);
-            }
-
-            if ($('.card-clear').length === 12) {
-                setTimeout(() => {
-                    clearInterval(timer)
+              setTimeout(() => {
+                $('#over-text').mouseout(() => {
+                  $('#over-text').css('background', '#FFB6C1')
+                  $('#over-text').text('Congratulations')
                 })
-                Swal.fire({
-
-                    title: '恭喜過關',
-                    text: `您花了${count}秒`
+                $('#over-text').mouseover(() => {
+                  $('#over-text').css('background', '#F08080')
+                  $('#over-text').text('Again')
                 })
-                btnStart.disabled = false
-                $('#btn-start').css({ color: 'black', backgroundColor: 'lightgoldenrodyellow' })
-            }
+              }, 800)
+              $('#over-text').click(() => {
+                $('#over').css('display', 'none')
+                $('#block').css('display', 'block')
+                countdown = 45
+                remember = 5
+                $('.card-clear').find('.card-front').css('backgroundColor', '#e8ddcb')
+                $('.card').attr('class', 'card')
+                gamesetting()
+              })
+            }, 500)
+          }
+        }, 1000);
+      }, 5000);
+    })
 
+    // 隨機產生 12 張牌
+    for (let i = 0; i < 12; i++) {
+      $('#game').append(`
+        <div class="card">
+          <div class="card-front"></div>
+          <div class="card-back"></div>
+        </div>
+      `)
+    }
 
+    const gamesetting = () => {
+      // 決定數字並打散
+      for (let i = 0; i < 12; i++) {
+        let number = i % (12 / 2 ) + 1
+        // 決定數字
+        $('.card').eq(i).find('.card-front').css('background-image', `url(./img/${number}.png)`)
+        $('.card').eq(i).attr('data-card', number)
 
-        })
+        // 隨機打散
+        let target = Math.floor(Math.random() * 12)
+        $('.card').eq(target).insertAfter($('.card').eq(i))
+      }
+    }
 
-    </script>
+    gamesetting ()
+
+    $('#game').on('click', '.card', function () {
+      // 最多只能翻兩張牌
+      if ($('.card-open').length < 2 && !$(this).hasClass('card-open')) {
+        $(this).addClass('card-open')
+      }
+      // 如果翻了兩張了
+      if ($('.card-open').length === 2) {
+        // 兩張數字一樣
+        if ($('.card-open').eq(0).attr('data-card') === $('.card-open').eq(1).attr('data-card')) {
+          // 淡出，並標記 card-clear 表示已解決
+          setTimeout(() => {
+            $('.card-open').addClass('card-clear')
+            $('.card-open').removeClass('card-open')
+            $('card-clear').find('.card-front').css('backgroundColor', '#red')
+          }, 500);
+        } else {
+          setTimeout(() => {
+            $('.card-open').removeClass('card-open')
+          }, 500);
+        }
+      }
+    })
+  </script>
 </body>
-
 </html>
